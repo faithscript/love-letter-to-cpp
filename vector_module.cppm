@@ -1,4 +1,7 @@
+module;
+#include <stdexcept>
 export module Vector;
+
 
 export class Vector
 {
@@ -29,8 +32,19 @@ Vector::Vector(Vector&& other) noexcept : elem{other.elem}, sz{other.sz}
     other.elem = nullptr;
     other.sz = 0;
 }
-const double& Vector::operator[](int i) const { return elem[i]; }
-double& Vector::operator[](int i) { return elem[i]; } 
+const double& Vector::operator[](int i) const
+{
+    if (i < 0 || i >= sz)
+        throw std::out_of_range("Vector::operator[] const: index out of range");
+    return elem[i];
+}
+
+double& Vector::operator[](int i)
+{
+    if (i < 0 || i >= sz)
+        throw std::out_of_range("Vector::operator[]: index out of range");
+    return elem[i];
+}
 int Vector::size() const { return sz; }
 
 Vector& Vector::operator=(const Vector& other)
