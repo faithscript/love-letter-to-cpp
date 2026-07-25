@@ -1,9 +1,18 @@
-#include <iostream> 
+#include <iostream>
+#include <stdexcept>  
+#include <new>
 
 class Vector 
 {
 public: 
-    Vector(int s) : elem{new double[s]}, sz{s} {}
+    Vector(int s)
+    {
+        if (s < 0){
+            throw std::length_error{"Vector()"};
+        }
+        elem = new double[s];
+        sz = s;
+    }
 
     Vector(const Vector& other) : elem{new double[other.sz]}, sz{other.sz} 
     {
@@ -50,15 +59,17 @@ public:
     
     const double& operator[](int i) const
     {
-        if (i < 0 || i >= sz)
-            throw std::out_of_range("Vector::operator[] const: index out of range");
+        if (i < 0 || i >= sz) {
+            throw std::out_of_range("operator[] const");
+        }
         return elem[i];
     }
 
     double& operator[](int i)
     {
-        if (i < 0 || i >= sz)
-            throw std::out_of_range("Vector::operator[]: index out of range");
+        if (i < 0 || i >= sz) {
+            throw std::out_of_range("operator[]");
+        }
         return elem[i];
     }
     int size() const { return sz; }
@@ -72,19 +83,45 @@ private:
 
 int main()
 {
-    Vector v(5);
+    //length_error — negative size passed to constructor
+    try {
+        Vector bad(-27);
+    }
+    catch (const std::length_error& e) {
+        std::cout << e.what() << '\n';
+    }
 
+    //out_of_range, valid Vector, bad index
+    Vector v(5);
     for (int i = 0; i < v.size(); i++)
         v[i] = i * 1.5;
 
-    try
-    {
-        std::cout << v[10] << '\n';   // out of range on purpose
+    try {
+        std::cout << v[10] << '\n';
     }
-    catch (const std::out_of_range& e)
-    {
-        std::cout << "Caught exception: " << e.what() << '\n';
+    catch (const std::out_of_range& e) {
+        std::cout << e.what() << '\n';
     }
 
-    std::cout << "Program continues normally after the catch.\n";
+    // const version of operator[]
+    const Vector& cv = v;
+    try {
+        std::cout << cv[-1] << '\n';
+    }
+    catch (const std::out_of_range& e) {
+        std::cout << e.what() << '\n';
+    }
+
+    //bad_alloc — large allocation
+    try {
+        Vector huge(2'000'000'000);
+    }
+    catch (const std::bad_alloc& e) {
+        std::cout << e.what() << '\n';
+    }
+    catch (const std::length_error& e) {
+        std::cout << e.what() << '\n';
+    }
+
+    std::cout << "Program continues normally after all catches.\n";
 }

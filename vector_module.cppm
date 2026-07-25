@@ -20,7 +20,12 @@ private:
     int sz;
 };
 
-Vector::Vector(int s) : elem{new double[s]}, sz{s} {}
+Vector::Vector(int s)
+{
+    if(s < 0){
+        throw std::length_error("Vector::Vector()");
+    }
+}
 Vector::Vector(const Vector& other) : elem{new double[other.sz]}, sz{other.sz}
 {
     for(int i = 0; i!=sz; i++){
@@ -34,15 +39,17 @@ Vector::Vector(Vector&& other) noexcept : elem{other.elem}, sz{other.sz}
 }
 const double& Vector::operator[](int i) const
 {
-    if (i < 0 || i >= sz)
-        throw std::out_of_range("Vector::operator[] const: index out of range");
+    if (i < 0 || i >= sz){
+        throw std::out_of_range("Vector::operator[] const");
+    }
     return elem[i];
 }
 
 double& Vector::operator[](int i)
 {
-    if (i < 0 || i >= sz)
-        throw std::out_of_range("Vector::operator[]: index out of range");
+    if (i < 0 || i >= sz) {
+        throw std::out_of_range("Vector::operator[]");
+    }
     return elem[i];
 }
 int Vector::size() const { return sz; }
