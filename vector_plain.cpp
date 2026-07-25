@@ -81,47 +81,31 @@ private:
     int sz;
 };  
 
-int main()
+void test(int n)
 {
-    //length_error — negative size passed to constructor
     try {
-        Vector bad(-27);
+        Vector v(n);
+        std::cout << v[n + 1] << '\n';
     }
     catch (const std::length_error& e) {
         std::cout << e.what() << '\n';
-    }
-
-    //out_of_range, valid Vector, bad index
-    Vector v(5);
-    for (int i = 0; i < v.size(); i++)
-        v[i] = i * 1.5;
-
-    try {
-        std::cout << v[10] << '\n';
-    }
-    catch (const std::out_of_range& e) {
-        std::cout << e.what() << '\n';
-    }
-
-    // const version of operator[]
-    const Vector& cv = v;
-    try {
-        std::cout << cv[-1] << '\n';
-    }
-    catch (const std::out_of_range& e) {
-        std::cout << e.what() << '\n';
-    }
-
-    //bad_alloc — large allocation
-    try {
-        Vector huge(2'000'000'000);
     }
     catch (const std::bad_alloc& e) {
         std::cout << e.what() << '\n';
     }
-    catch (const std::length_error& e) {
+    catch (const std::out_of_range& e) {
         std::cout << e.what() << '\n';
     }
+}
 
-    std::cout << "Program continues normally after all catches.\n";
+void run()
+{
+    test(-27);           
+    test(2'000'000'000);  
+    test(10);              
+}
+
+int main()
+{
+    run();
 }
