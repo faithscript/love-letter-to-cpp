@@ -48,14 +48,14 @@ public:
         return *this;
     }
     
-    const double& Vector::operator[](int i) const
+    const double& operator[](int i) const
     {
         if (i < 0 || i >= sz)
             throw std::out_of_range("Vector::operator[] const: index out of range");
         return elem[i];
     }
 
-    double& Vector::operator[](int i)
+    double& operator[](int i)
     {
         if (i < 0 || i >= sz)
             throw std::out_of_range("Vector::operator[]: index out of range");
@@ -73,9 +73,18 @@ private:
 int main()
 {
     Vector v(5);
+
     for (int i = 0; i < v.size(); i++)
         v[i] = i * 1.5;
 
-    for (int i = 0; i < v.size(); i++)
-        std::cout << v[i] << '\n';
+    try
+    {
+        std::cout << v[10] << '\n';   // out of range on purpose
+    }
+    catch (const std::out_of_range& e)
+    {
+        std::cout << "Caught exception: " << e.what() << '\n';
+    }
+
+    std::cout << "Program continues normally after the catch.\n";
 }
