@@ -48,10 +48,19 @@ public:
         return *this;
     }
     
-    double& operator[](int i) { return elem[i]; } 
+    const double& Vector::operator[](int i) const
+    {
+        if (i < 0 || i >= sz)
+            throw std::out_of_range("Vector::operator[] const: index out of range");
+        return elem[i];
+    }
 
-    const double& operator[](int i) const { return elem[i]; }
-
+    double& Vector::operator[](int i)
+    {
+        if (i < 0 || i >= sz)
+            throw std::out_of_range("Vector::operator[]: index out of range");
+        return elem[i];
+    }
     int size() const { return sz; }
 
     ~Vector() { delete[] elem; }
@@ -61,3 +70,12 @@ private:
     int sz;
 };  
 
+int main()
+{
+    Vector v(5);
+    for (int i = 0; i < v.size(); i++)
+        v[i] = i * 1.5;
+
+    for (int i = 0; i < v.size(); i++)
+        std::cout << v[i] << '\n';
+}
