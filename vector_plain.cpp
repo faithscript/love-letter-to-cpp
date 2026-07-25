@@ -5,7 +5,6 @@ class Vector
 public: 
     Vector(int s) : elem{new double[s]}, sz{s} {}
 
-    // Copy Constructor
     Vector(const Vector& other) : elem{new double[other.sz]}, sz{other.sz} 
     {
         for(int i = 0; i != sz; i++){
@@ -13,8 +12,13 @@ public:
         }
     }
 
+    Vector(Vector&& other) noexcept : elem{other.elem}, sz{other.sz}
+    {
+        other.elem = nullptr;
+        other.sz = 0;
+    }
 
-    // Copy Assignment
+
     Vector& operator=(const Vector& other)
     {
         if(this == &other) { return *this; }
@@ -30,9 +34,25 @@ public:
         return *this;      
     }
 
-    const double& operator[](int i) { return elem[i]; }
+    Vector& operator=(Vector&& other) noexcept
+    {
+        if(this == &other) return *this;
 
-    const int size() { return sz; }
+        delete[] elem;
+        elem = other.elem;
+        sz = other.sz;
+
+        other.elem = nullptr;
+        other.sz = 0;
+
+        return *this;
+    }
+    
+    double& operator[](int i) { return elem[i]; } 
+
+    const double& operator[](int i) const { return elem[i]; }
+
+    int size() const { return sz; }
 
     ~Vector() { delete[] elem; }
 
