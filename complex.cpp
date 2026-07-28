@@ -48,7 +48,6 @@ public:
     }
 };
 
-// free functions - don't need direct access to representation
 complex operator+(complex a, complex b) { return a += b; }
 complex operator-(complex a, complex b) { return a -= b; }
 complex operator-(complex a) { return {-a.real(), -a.imag()}; } 
