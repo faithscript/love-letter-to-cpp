@@ -1,7 +1,7 @@
-# Love Letter to C++
+# Thinking in C++
 
-Fraught with flaws and unanswered questions, I explore C++ from data structures to memory, abstractions, and concurrency.
+A chronicle of my journey through C++, from data structures and memory to abstractions and concurrency.
 
-The language gives great power. It also gives enough freedom to create your own problems.
+The language bestows great power upon those who seek it. It also delights in humbling the overconfident.
 
 The compiler remains unconvinced.
