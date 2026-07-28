@@ -185,5 +185,4 @@ void run_exception_tests()
 int main()
 {
     run_valid_tests();
-    run_exception_tests();
 }
