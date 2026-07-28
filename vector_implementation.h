@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <stdexcept>  
 #include <new>
@@ -99,32 +100,3 @@ private:
     double* elem;
     int sz;
 };  
-
-void test(int n)
-{
-    try {
-        Vector v(n);
-        std::cout << v[n + 1] << '\n';
-    }
-    catch (const std::length_error& e) {
-        std::cout << e.what() << '\n';
-    }
-    catch (const std::bad_alloc& e) {
-        std::cout << e.what() << '\n';
-    }
-    catch (const std::out_of_range& e) {
-        std::cout << e.what() << '\n';
-    }
-}
-
-void run()
-{
-    test(-27);           
-    test(2'000'000'000);  
-    test(10);              
-}
-
-int main()
-{
-    run();
-}
