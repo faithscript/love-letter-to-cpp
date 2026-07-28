@@ -54,11 +54,15 @@ void use(Container& c)
 
 int main()
 {
-    Vector_container vc(5);
-    for (int i = 0; i != vc.size(); ++i)
-        vc[i] = i * 1.1;
-    use(vc);
+    std::unique_ptr<Container> c = std::make_unique<Vector_container>(5);
 
-    List_container lc = {1, 2, 3, 4, 5};
-    use(lc);
+    for (int i = 0; i != c->size(); ++i)
+        (*c)[i] = i * 1.1;
+
+    use(*c);
+
+    c = std::make_unique<List_container>(std::initializer_list<double>{1, 2, 3, 4, 5});
+    use(*c);
+
+    return 0;
 }
