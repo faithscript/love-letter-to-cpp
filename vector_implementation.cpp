@@ -14,6 +14,12 @@ public:
         sz = s;
     }
 
+    Vector::Vector(std::initializer_list<double> lst)   
+        : elem{new double[lst.size()]}, sz{static_cast<int>(lst.size())}
+    {
+        std::copy(lst.begin(), lst.end(), elem);  
+    }
+
     Vector(const Vector& other) : elem{new double[other.sz]}, sz{other.sz} 
     {
         for(int i = 0; i != sz; i++){
@@ -71,6 +77,19 @@ public:
             throw std::out_of_range("operator[]");
         }
         return elem[i];
+    }
+    void push_back(double d)
+    {
+        double* new_elem = new double[sz + 1];   
+
+        for (int i = 0; i != sz; ++i)            
+            new_elem[i] = elem[i];
+
+        new_elem[sz] = d;                        
+
+        delete[] elem;                          
+        elem = new_elem;                           
+        ++sz;                                     
     }
     int size() const { return sz; }
 
