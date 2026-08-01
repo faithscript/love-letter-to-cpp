@@ -119,6 +119,17 @@ static const auto init = [] {
     return 0;
 }();
 
+//combination formula
+ll C(ll n, ll r) {
+    if (r < 0 || r > n) return 0;
+    r = min(r, n - r);              // use symmetry to minimize iterations
+    ll result = 1;
+    for (ll i = 0; i < r; i++) {
+        result = result * (n - i) / (i + 1);   // careful: this order avoids intermediate fractions
+    }
+    return result;
+}
+
 
 // =========================
 // Solution
