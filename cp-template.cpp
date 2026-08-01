@@ -95,7 +95,10 @@ using minpqll = priority_queue<ll, vector<ll>, greater<ll>>;   // min-heap
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 #define sz(x) ((int)(x).size())
-
+#define         rep(i, n)                   for (ll i = 0; i < (n); ++i) 
+#define         rep1(i, a, b)               for (ll i = (a); i <= (b); ++i)
+#define         rep2(i, a, b)               for (ll i = (a); i >= (b); --i)
+#define         pb                          push_back 
 
 // =========================
 // Constants
