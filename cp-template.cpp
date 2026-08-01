@@ -5,8 +5,16 @@ using namespace std;
 // =========================
 // Fast memory allocator
 // =========================
-// Global new/delete optimization
-// Put before Solution class
+// Global new/delete optimization — bump allocator.
+// Put before Solution class.
+//
+// CAVEAT: delete() is a no-op, memory is never reclaimed.
+// Safe for single-shot judges (process per test case, e.g. Codeforces).
+// RISKY on judges that reuse one process across many test cases
+// (e.g. LeetCode) — memory_ptr only grows and can exhaust
+// MAX_MEMORY partway through unrelated later tests.
+// Call reset() between cases if that applies, or just don't
+// use this on LeetCode-style harnesses.
 // =========================
 
 constexpr size_t MAX_MEMORY = 1ULL << 28; // 256 MB
@@ -14,6 +22,9 @@ constexpr size_t MAX_MEMORY = 1ULL << 28; // 256 MB
 static unsigned char memory_pool[MAX_MEMORY]; // static: global lifetime storage
 static size_t memory_ptr = 0;
 
+inline void reset_memory_pool() {
+    memory_ptr = 0;
+}
 
 void* operator new(size_t size) {
     if (size == 0)
@@ -30,15 +41,12 @@ void* operator new(size_t size) {
     return ptr;
 }
 
-
 void* operator new[](size_t size) {
     return operator new(size);
 }
 
-
 void operator delete(void*) noexcept {}
 void operator delete[](void*) noexcept {}
-
 
 // C++17 sized deletes
 void operator delete(void*, size_t) noexcept {}
@@ -61,13 +69,32 @@ using pll = pair<ll,ll>;
 using vvi = vector<vi>;
 using vvll = vector<vll>;
 
+// ordered
+using mii = map<int,int>;
+using mll = map<ll,ll>;
+using si = set<int>;
+using sll = set<ll>;
+
+// unordered
+using umii = unordered_map<int,int>;
+using umll = unordered_map<ll,ll>;
+using usi = unordered_set<int>;
+using usll = unordered_set<ll>;
+
+// heaps (priority_queue)
+using pqi = priority_queue<int>;                              // max-heap (default)
+using pqll = priority_queue<ll>;                               // max-heap
+using minpqi = priority_queue<int, vector<int>, greater<int>>; // min-heap
+using minpqll = priority_queue<ll, vector<ll>, greater<ll>>;   // min-heap
+
 
 // =========================
 // Macros
 // =========================
 
-#define all(x) begin(x), end(x)
-#define sz(x) ((int)x.size())
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define sz(x) ((int)(x).size())
 
 
 // =========================
