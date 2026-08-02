@@ -107,6 +107,7 @@ using minpqll = priority_queue<ll, vector<ll>, greater<ll>>;   // min-heap
 constexpr int INF = 1e9;
 constexpr ll LINF = 4e18;
 constexpr int MOD = 1e9 + 7;
+const int MAX = 500005;
 
 
 // =========================
@@ -120,8 +121,11 @@ static const auto init = [] {
 }();
 
 //combination formula
-ll C(ll n, ll r) {
-    if (r < 0 || r > n) return 0;
+
+vector<ll> fact(MAX), invFact(MAX);
+
+ll nCr(int n, int r) {
+    if (r < 0 || r > n || n < 0) return 0;
     return fact[n] * invFact[r] % MOD * invFact[n - r] % MOD;
 }
 
@@ -135,6 +139,20 @@ ll modPow(ll a, ll e) {
     }
     return ans;
 }
+
+bool buildTables() {
+    fact[0] = 1;
+    for (int i = 1; i < MAX; i++)
+        fact[i] = fact[i - 1] * i % MOD;
+
+    invFact[MAX - 1] = power(fact[MAX - 1], MOD - 2);
+    for (int i = MAX - 2; i >= 0; i--)
+        invFact[i] = invFact[i + 1] * (i + 1) % MOD;
+
+    return true;
+}
+
+bool tablesReady = buildTables();
 
 
 // =========================
