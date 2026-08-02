@@ -130,14 +130,15 @@ ll nCr(int n, int r) {
 }
 
 // modulo for division
-ll modPow(ll a, ll e) {
-    ll ans = 1;
-    while (e > 0) {
-        if (e & 1) ans = ans * a % MOD;
+ll power(ll a, ll b) {
+    ll res = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) res = res * a % MOD;
         a = a * a % MOD;
-        e >>= 1;
+        b >>= 1;
     }
-    return ans;
+    return res;
 }
 
 bool buildTables() {
