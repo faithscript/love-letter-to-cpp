@@ -130,6 +130,17 @@ ll C(ll n, ll r) {
     return result;
 }
 
+// modulo for division
+ll modPow(ll a, ll e) {
+    ll ans = 1;
+    while (e > 0) {
+        if (e & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return ans;
+}
+
 
 // =========================
 // Solution
