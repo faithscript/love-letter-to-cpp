@@ -120,40 +120,109 @@ static const auto init = [] {
     return 0;
 }();
 
-//combination formula
+/*
+========================================
+MODULAR INVERSE TEMPLATE
+========================================
 
-vector<ll> fact(MAX), invFact(MAX);
+1. Prime Modulus (Fermat)
+-------------------------
+Use:
+    modinv_prime(a, MOD)
 
-ll nCr(int n, int r) {
-    if (r < 0 || r > n || n < 0) return 0;
-    return fact[n] * invFact[r] % MOD * invFact[n - r] % MOD;
-}
+Requirements:
+- MOD is prime.
+- gcd(a, MOD) = 1.
+- O(log MOD).
 
-// modulo for division
-ll power(ll a, ll b) {
-    ll res = 1;
+
+2. Arbitrary Modulus (Extended Euclid)
+--------------------------------------
+Use:
+    modinv(a, mod)
+
+Requirements:
+- gcd(a, mod) = 1.
+- Returns -1 if no inverse exists.
+- O(log mod).
+
+
+3. Precompute Inverses
+----------------------
+Use:
+    auto inv = precompute_inv(N, MOD);
+
+Requirements:
+- MOD is prime.
+- inv[i] = i^{-1} (mod MOD)
+- O(N).
+
+Useful for:
+- nCr
+- Factorial inverses
+- Frequent modular division
+
+========================================
+*/
+
+const ll MOD = 1000000007;
+
+// Binary Exponentiation
+ll modpow(ll a, ll b) {
     a %= MOD;
+    ll res = 1;
+
     while (b) {
         if (b & 1) res = res * a % MOD;
         a = a * a % MOD;
         b >>= 1;
     }
+
     return res;
 }
 
-bool buildTables() {
-    fact[0] = 1;
-    for (int i = 1; i < MAX; i++)
-        fact[i] = fact[i - 1] * i % MOD;
-
-    invFact[MAX - 1] = power(fact[MAX - 1], MOD - 2);
-    for (int i = MAX - 2; i >= 0; i--)
-        invFact[i] = invFact[i + 1] * (i + 1) % MOD;
-
-    return true;
+// Modular Inverse (MOD must be prime)
+ll modinv(ll a) {
+    return modpow(a, MOD - 2);
 }
 
-bool tablesReady = buildTables();
+// Inverses of 1...N
+vector<ll> precompute_inv(int N) {
+    vector<ll> inv(N + 1);
+    inv[1] = 1;
+
+    for (int i = 2; i <= N; i++)
+        inv[i] = MOD - (MOD / i) * inv[MOD % i] % MOD;
+
+    return inv;
+}
+
+// Factorials & Inverse Factorials
+vector<ll> fact, invfact;
+
+void init_fact(int N) {
+    fact.resize(N + 1);
+    invfact.resize(N + 1);
+
+    fact[0] = 1;
+    for (int i = 1; i <= N; i++)
+        fact[i] = fact[i - 1] * i % MOD;
+
+    invfact[N] = modinv(fact[N]);
+
+    for (int i = N; i >= 1; i--)
+        invfact[i - 1] = invfact[i] * i % MOD;
+}
+
+ll nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n - r] % MOD;
+}
+
+ll nPr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[n - r] % MOD;
+}
 
 
 // =========================
